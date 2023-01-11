@@ -10,4 +10,7 @@ namespace Landis.Library.Succession
     /// <returns>true if the species seeds the site.</returns>
     public delegate void SeedingAlgorithm(ISpecies   species,
                                           ActiveSite site, out bool established, out double seedlingProportion, ThreadSafeRandom randomGen = null);
+
+    public delegate void DoesSpeciesSeedSite(ISpecies species,
+                                        ActiveSite site, out bool established, out double seedlingProportion, ThreadSafeRandom randomGen = null);
 }

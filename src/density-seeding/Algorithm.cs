@@ -1,22 +1,16 @@
 ﻿using Landis.Core;
-using Landis.SpatialModeling;
-using log4net;
-using Seed_Dispersal;
-using System.Reflection;
-using System.Collections.Generic;
-using System;
-using System.IO;
 using Landis.Utilities;
-using System.Linq;
-using Landis.Utilities.Diagnostics;
-using System.Diagnostics;
+using Landis.SpatialModeling;
+using Landis.Library.SeedDispersal;
+using System.Collections.Generic;
+
 
 
 namespace Landis.Library.Succession.DensitySeeding
 {    
     public class Algorithm
     {
-        private DensitySeeding.DensitySeedMap seedingData;
+        private SeedDispersal.DensitySeeding.DensitySeedMap seedingData;
         private int timeAtLastCall = -99999;
 
         public Algorithm(int successionTimestep)
@@ -32,9 +26,9 @@ namespace Landis.Library.Succession.DensitySeeding
 
             int max_age_steps = maxCohortAge / successionTimestep;
 
-
+            Library.SeedDispersal.Main.InitializeLib(Model.Core);
            
-            seedingData = new DensitySeeding.DensitySeedMap(successionTimestep);
+            seedingData = new SeedDispersal.DensitySeeding.DensitySeedMap(successionTimestep);
 
             for (int s = 0; s < Model.Core.Species.Count; s++)
             {

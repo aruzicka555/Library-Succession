@@ -1,4 +1,7 @@
 using Landis.Utilities;
+using Landis.Library.SeedDispersal;
+using Landis.Core;
+using Landis.SpatialModeling;
 
 namespace Landis.Library.Succession
 {
@@ -7,14 +10,23 @@ namespace Landis.Library.Succession
     /// </summary>
     public static class SeedingAlgorithmsUtil
     {
-        /// <summary>
-        /// Parses a word into a SeedingAlgorithm.
-        /// </summary>
-        /// <exception cref="System.FormatException">
-        /// The word doesn't match any of these: "NoDispersal",
-        /// "UniversalDispersal", "WardSeedDispersal", "DemographicSeeding".
-        /// </exception>
-        public static SeedingAlgorithms Parse(string word)
+
+        public static class Delegates
+        {
+
+            public delegate void DoesSpeciesSeedSite(ISpecies species,
+                                        ActiveSite site, out bool established, out double seedlingProportion, ThreadSafeRandom randomGen = null);
+
+        }
+
+            /// <summary>
+            /// Parses a word into a SeedingAlgorithm.
+            /// </summary>
+            /// <exception cref="System.FormatException">
+            /// The word doesn't match any of these: "NoDispersal",
+            /// "UniversalDispersal", "WardSeedDispersal", "DemographicSeeding".
+            /// </exception>
+            public static SeedingAlgorithms Parse(string word)
         {
             if (word == "NoDispersal")
                 return SeedingAlgorithms.NoDispersal;
