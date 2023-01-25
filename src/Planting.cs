@@ -2,6 +2,7 @@ using Landis.Core;
 using System.Collections;
 using System.Collections.Generic;
 using Landis.SpatialModeling;
+using Landis.Utilities;
 
 namespace Landis.Library.Succession
 {
@@ -18,9 +19,8 @@ namespace Landis.Library.Succession
         public class SpeciesList
         {
             private BitArray bitArray;
-            
-            // JSF - Convert dictionary to float
-            private Dictionary<ISpecies, uint> plantDict;
+           
+            private Dictionary<ISpecies, float> plantDict;
 
             //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -39,10 +39,10 @@ namespace Landis.Library.Succession
 
             public SpeciesList(IEnumerable<ISpecies> speciesList,
                                ISpeciesDataset speciesDataset,
-                               Dictionary<ISpecies, uint> plantNum)
+                               Dictionary<ISpecies, float> plantNum)
             {
                 bitArray = new BitArray(speciesDataset.Count);
-                plantDict = new Dictionary<ISpecies, uint>();
+                plantDict = new Dictionary<ISpecies, float>();
                 if (speciesList != null)
                 {
                     foreach (ISpecies species in speciesList)
@@ -63,7 +63,7 @@ namespace Landis.Library.Succession
                 }
             }
 
-            internal Dictionary<ISpecies, uint> AsPlantDict
+            internal Dictionary<ISpecies, float> AsPlantDict
             {
                 get
                 {
@@ -108,6 +108,8 @@ namespace Landis.Library.Succession
                 }
             }
         }
+
+        //---------------------------------------------------------------------
 
     }
 }
