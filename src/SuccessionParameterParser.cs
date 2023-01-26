@@ -71,9 +71,11 @@ namespace Landis.Library.Succession
             InputVar<Dictionary<ISpecies, float>> plant = new InputVar<Dictionary<ISpecies, float>>("Plant", ReadDensitySpeciesList);
             if (ReadOptionalVar(plant))
             {
-
                 List<ISpecies> keyList = new List<ISpecies>(plant.Value.Actual.Keys);
-                return new Planting.SpeciesList(keyList, speciesDataset, plant.Value.Actual);
+                if(plant.Value.Actual.ContainsValue(-1))
+                    return new Planting.SpeciesList(keyList, speciesDataset);
+                else
+                    return new Planting.SpeciesList(keyList, speciesDataset, plant.Value.Actual);
 
             }
             else
@@ -90,7 +92,7 @@ namespace Landis.Library.Succession
         {
             List<string> speciesNames = new List<string>();
             //List<ISpecies> speciesList = new List<ISpecies>();
-            float plantDensity = 1;
+            float plantDensity = -1;
 
             Dictionary<ISpecies, float> speciesPlanting = new Dictionary<ISpecies, float>();
             TextReader.SkipWhitespace(currentLine);
@@ -110,9 +112,9 @@ namespace Landis.Library.Succession
                     plantDensity = ReadPlantingDensity(currentLine);
                     TextReader.SkipWhitespace(currentLine);
                 }
-
-                speciesNames.Add(species.Name);
                 speciesPlanting.Add(species, plantDensity);
+                speciesNames.Add(species.Name);
+
                 //speciesList.Add(species);
 
                 TextReader.SkipWhitespace(currentLine);

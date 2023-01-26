@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Landis.Utilities;
+using Landis.Library.SeedDispersal;
 
 namespace Landis.Library.Succession.DemographicSeeding
 {

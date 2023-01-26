@@ -85,8 +85,8 @@ namespace Landis.Library.Succession.DemographicSeeding
             // Load user-specified parameters
             string path = "demographic-seeding.txt";  // hard-wired for now, so no changes required to succession extensions
             Model.Core.UI.WriteLine("Reading demographic seeding parameters from {0} ...", path);
-            ParameterParser parser = new ParameterParser(Model.Core.Species);
-            Parameters parameters = Landis.Data.Load<Parameters>(path, parser);
+            SeedDispersal.ParameterParser parser = new SeedDispersal.ParameterParser(Model.Core);
+            SeedDispersal.Parameters parameters = Landis.Data.Load<SeedDispersal.Parameters>(path, parser);
 
             seedingData.dispersal_model  = parameters.Kernel;
             seedingData.seed_model       = parameters.SeedProductionModel;
@@ -104,7 +104,7 @@ namespace Landis.Library.Succession.DemographicSeeding
 
             foreach (ISpecies species in Model.Core.Species)
             {
-                SpeciesParameters speciesParameters = parameters.SpeciesParameters[species.Index]; 
+                SeedDispersal.SpeciesParameters speciesParameters = parameters.SpeciesParameters[species.Index]; 
                 seedingData.all_species[species.Index].min_seed  = speciesParameters.MinSeedsProduced;
                 seedingData.all_species[species.Index].max_seed  = speciesParameters.MaxSeedsProduced;
                 seedingData.all_species[species.Index].seed_mass = speciesParameters.SeedMass;
@@ -150,7 +150,7 @@ namespace Landis.Library.Succession.DemographicSeeding
             string fileTemplate = parameters.DispersalProbabilitiesLog;
             foreach (ISpecies species in Model.Core.Species)
             {
-                string dispersalProbSpeciesFilename = MapPaths.ReplaceTemplateVars(fileTemplate, 0, species.Name);
+                string dispersalProbSpeciesFilename = SeedDispersal.MapPaths.ReplaceTemplateVars(fileTemplate, 0, species.Name);
                 if(File.Exists(dispersalProbSpeciesFilename))
                 {
                     string firstLine;
@@ -180,11 +180,11 @@ namespace Landis.Library.Succession.DemographicSeeding
             {
                 if (dispersalKernels[species.Index].Keys.Count() == 0)
                 {
-                    SpeciesParameters speciesParameters = parameters.SpeciesParameters[species.Index];
+                    SeedDispersal.SpeciesParameters speciesParameters = parameters.SpeciesParameters[species.Index];
                     if (dispersalProbabilitiesFilename != null)
                     {                        
                         // substitute species name into Filename
-                        string dispersalProbSpeciesFilename = MapPaths.ReplaceTemplateVars(dispersalProbabilitiesFilename, 0, species.Name);
+                        string dispersalProbSpeciesFilename = SeedDispersal.MapPaths.ReplaceTemplateVars(dispersalProbabilitiesFilename, 0, species.Name);
 
                         // Truncate DispersalProbabilitiesLog file and write header
                         using (System.IO.StreamWriter file = new System.IO.StreamWriter(dispersalProbSpeciesFilename, false))
@@ -325,7 +325,7 @@ namespace Landis.Library.Succession.DemographicSeeding
             {
                 if (dispersalKernels[species.Index].Keys.Count() == 0)
                 {
-                    string dispersalProbSpeciesFilename = MapPaths.ReplaceTemplateVars(dispersalProbabilitiesFilename, 0, species.Name);
+                    string dispersalProbSpeciesFilename = SeedDispersal.MapPaths.ReplaceTemplateVars(dispersalProbabilitiesFilename, 0, species.Name);
                     using (System.IO.StreamWriter file = new System.IO.StreamWriter(dispersalProbSpeciesFilename, true))
                     {
                         int s = species.Index;
@@ -475,7 +475,7 @@ namespace Landis.Library.Succession.DemographicSeeding
 
             foreach (ISpecies species in Model.Core.Species)
             {
-                string path = MapPaths.ReplaceTemplateVars(pathTemplate, year, species.Name);
+                string path = SeedDispersal.MapPaths.ReplaceTemplateVars(pathTemplate, year, species.Name);
                 int s = species.Index;
                 using (IOutputRaster<IntPixel> outputRaster = Model.Core.CreateRaster<IntPixel>(path, Model.Core.Landscape.Dimensions))
                 {

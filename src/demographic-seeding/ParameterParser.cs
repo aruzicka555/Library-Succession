@@ -17,6 +17,7 @@ using Landis.Core;
 using System.Collections.Generic;
 //using Landis.Library.Parameters;
 using System;
+using Landis.Library.SeedDispersal;
 
 namespace Landis.Library.Succession.DemographicSeeding
 {
