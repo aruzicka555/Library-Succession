@@ -1,4 +1,5 @@
 ﻿using Landis.Core;
+using Landis.GeoTiff;
 using Landis.SpatialModeling;
 using log4net;
 using Seed_Dispersal;
@@ -154,18 +155,18 @@ namespace Landis.Library.Succession.DensitySeeding
                 int s = species.Index;
                 Model.Core.UI.WriteLine("   Writing {0} maps ...", species.Name);
 
-                using (IOutputRaster<IntPixel> outputRaster = Model.Core.CreateRaster<IntPixel>(treepath, Model.Core.Landscape.Dimensions))
+                using (IOutputRaster<int> outputRaster = Model.Core.CreateRaster<int>(treepath, Model.Core.Landscape.Dimensions))
                 {
-                    IntPixel pixel = outputRaster.BufferPixel;
+                    int pixel = outputRaster.BufferPixel;
                     foreach (Site site in Model.Core.Landscape.AllSites)
                     {
                         int x = site.Location.Column - 1;
                         int y = site.Location.Row - 1;
 
                         if (site.IsActive)
-                            pixel.MapCode.Value = seedingData.seedDispersal[s][x][y];
+                            pixel = seedingData.seedDispersal[s][x][y];
                         else
-                            pixel.MapCode.Value = 0;
+                            pixel = 0;
 
                         outputRaster.WriteBufferPixel();
                     }
@@ -225,18 +226,6 @@ namespace Landis.Library.Succession.DensitySeeding
                 varValues[SpeciesVar] = species;
                 varValues[TimestepVar] = timestep.ToString();
                 return OutputPath.ReplaceTemplateVars(template, varValues);
-            }
-        }
-
-        //---------------------------------------------------------------------
-
-        public class IntPixel : Pixel
-        {
-            public Band<int> MapCode = "The numeric code for each raster cell";
-
-            public IntPixel()
-            {
-                SetBands(MapCode);
             }
         }
     }

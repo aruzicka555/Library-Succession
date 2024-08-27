@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Landis.Core;
+using Landis.GeoTiff;
 using Landis.SpatialModeling;
 using log4net;
 using Seed_Dispersal;
@@ -477,14 +478,14 @@ namespace Landis.Library.Succession.DemographicSeeding
             {
                 string path = MapPaths.ReplaceTemplateVars(pathTemplate, year, species.Name);
                 int s = species.Index;
-                using (IOutputRaster<IntPixel> outputRaster = Model.Core.CreateRaster<IntPixel>(path, Model.Core.Landscape.Dimensions))
+                using (IOutputRaster<int> outputRaster = Model.Core.CreateRaster<int>(path, Model.Core.Landscape.Dimensions))
                 {
-                    IntPixel pixel = outputRaster.BufferPixel;
+                    int pixel = outputRaster.BufferPixel;
                     foreach (Site site in Model.Core.Landscape.AllSites)
                     {
                         int x = site.Location.Column - 1;
                         int y = site.Location.Row - 1;
-                        pixel.MapCode.Value = getSpeciesValueAt(x, y, s, yearInTimestep);
+                        pixel = getSpeciesValueAt(x, y, s, yearInTimestep);
                         outputRaster.WriteBufferPixel();
                     }
                 }
